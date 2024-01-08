@@ -4,6 +4,24 @@ setlocal EnableExtensions EnableDelayedExpansion
 @rem This script requires the user to install Python 3.10 or higher. All other
 @rem requirements are downloaded as needed.
 
+@rem create a conda environment to avoid version conflicts in the future
+echo "Would you like to set up a conda environment using the recommended Python version, version 3.10.12?"
+set /p choice="(y/n) "
+
+if /i "%choice%"=="y" (
+    where conda >nul 2>nul
+
+    if %errorlevel%==0 (
+        set /p env_name="Enter the name of the environment: "
+        conda run -n %env_name% conda create --name %env_name% python=3.10.12
+    ) else (
+        echo "Error: Conda is not installed or not added to the system's PATH environment variable."
+        echo "Latest version of conda can be found here https://docs.conda.io/projects/miniconda/en/latest/"
+    )
+) else (
+    echo "Continuing without conda..."
+)
+
 @rem change to the script's directory
 PUSHD "%~dp0"
 
